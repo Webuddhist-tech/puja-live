@@ -1,0 +1,165 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#14110f">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="robots" content="noindex">
+<link rel="manifest" href="manifest.json?v={{v:manifest.json}}">
+<link rel="icon" type="image/png" sizes="192x192" href="images/icon-192.png">
+<link rel="apple-touch-icon" href="images/icon-192.png">
+<title>Puja Live · Follow the prayers</title>
+<!-- The congregation's page: the prayer text follows the puja live, driven by the operator console.
+     Read-only. server.js fills in the content versions and the Tibetan font if public/fonts has one.
+     No outside services are loaded, so it also works where Google & co. are blocked. -->
+<style>/*{{font}}*/</style>
+<link rel="stylesheet" href="viewer.css?v={{v:viewer.css}}">
+</head>
+<body>
+<header>
+  <button class="home" id="homeBtn">
+    <img src="images/logo.png" alt="" width="34" height="34">
+    <span class="titles"><b id="hTitle"></b><span id="hPrayer" aria-live="polite"></span></span>
+  </button>
+  <a class="yt" id="ytLink" hidden target="_blank" rel="noopener" aria-label="Watch the live video on YouTube"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 7.5v9l7.5-4.5z"/></svg><span>YouTube</span></a>
+  <span class="live" id="live"><i></i><span id="liveTxt">LIVE</span></span>
+  <div class="prog" aria-hidden="true"><i id="progBar"></i></div>
+</header>
+
+<main id="doc"></main>
+<button class="follow" id="follow">↓ Follow live</button>
+
+<!-- Live view: the verse being chanted, as one large card -->
+<section class="stage" id="stage" hidden>
+  <div class="card" id="stCard" aria-live="polite">
+    <div class="eye" id="stEye" hidden></div>
+    <div class="art" id="stArt" hidden><div class="artbg" id="stBg"></div><img id="stImg" alt="" decoding="async"><span class="zoom" aria-hidden="true">⤢</span></div>
+    <div class="fig" id="stFig" hidden><i class="av" id="stAv"></i><span><small id="stNo"></small><b id="stName"></b></span></div>
+    <div id="stBody"></div>
+  </div>
+  <div class="next" id="stNext" aria-hidden="true"></div>
+</section>
+
+<div class="thx glass" id="thx" hidden role="dialog" aria-labelledby="thxT"><div class="lotus" aria-hidden="true">🙏</div><b id="thxT" data-t="thxT"></b>
+  <p data-t="thx1"></p><p class="glink" id="thxHome" role="button" tabindex="0"></p><button id="thxOk" data-t="thxOk"></button></div>
+<div class="zbox" id="lb" hidden role="dialog" aria-modal="true"><img id="lbImg" alt=""><div id="lbTxt"></div></div>
+
+<nav class="tabs glass" id="tabs"><div class="trow">
+  <button class="tab" id="tLive"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="6" width="16" height="12" rx="3"/><path d="M8 3h8M8 21h8"/></svg><span data-t="tLive"></span></button>
+  <button class="tab" id="tText"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 5h14M5 9.5h14M5 14h14M5 18.5h9"/></svg><span data-t="tText"></span></button>
+  <button class="tab" id="tocBtn" aria-haspopup="dialog"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6h11M9 12h11M9 18h11"/><path d="M4 6h.01M4 12h.01M4 18h.01" stroke-width="2.8"/></svg><span data-t="contents"></span></button>
+  <button class="tab" id="aaBtn" aria-haspopup="dialog"><span class="aa">Aa</span><span data-t="settings"></span></button>
+</div></nav>
+
+<div class="status glass" id="status" role="status" hidden></div>
+<div class="msg glass" id="msg" role="status" hidden><span id="msgTxt"></span><button id="msgX" aria-label="Close">×</button></div>
+<div class="toast glass" id="toast" role="status" hidden></div>
+
+<div class="guide glass" id="guide" role="dialog" aria-labelledby="gTitle" hidden>
+  <b id="gTitle" data-t="gTitle"></b>
+  <ul><li><i>1</i><span data-t="g1"></span></li><li><i>2</i><span data-t="g2"></span></li><li><i>3</i><span data-t="g3"></span></li>
+      <li id="gHome" hidden><i>4</i><span class="glink" id="gHomeT" role="button" tabindex="0"></span></li></ul>
+  <button id="gOk" data-t="gOk"></button>
+</div>
+<div class="appcard glass" id="appCard" role="dialog" aria-labelledby="acT" hidden><img src="images/icon-192.png" alt="" width="56" height="56">
+  <div><b id="acT"></b><span id="acS"></span></div>
+  <div class="acb"><button id="acNo" data-t="acNo"></button><button class="go" id="acYes"></button></div></div>
+<div class="coach" id="coach" aria-hidden="true" hidden><span id="coachT"></span><i></i></div>
+
+<!-- start: choose a language -->
+<div class="cover" id="welcome" hidden>
+  <div class="halo"></div>
+  <h1 id="wBo" lang="bo"></h1><h2 id="wEn"></h2><h3 id="wZh" lang="zh-Hant"></h3>
+  <div class="choices langs">
+    <button class="bo" data-l="bo" lang="bo">བོད་ཡིག</button>
+    <button data-l="en">English</button>
+    <div class="two"><button class="zh" data-l="zh" lang="zh-Hant">繁體中文</button><button class="zh" data-l="zhs" lang="zh-Hans">简体中文</button></div>
+  </div>
+  <div class="small">The text follows the puja live · 經文隨法會同步 · <span lang="bo">ཆོས་སྤྱོད་དང་མཉམ་དུ་འགྲོ།</span></div>
+  <button class="ghost" id="welcomeBack" hidden data-t="backToText"></button>
+</div>
+
+<!-- then: in the hall, or online (the text is then held back to match the video) -->
+<div class="cover" id="whereCover" hidden>
+  <div class="halo small"></div>
+  <h2 class="q" id="whereQ"></h2>
+  <div class="choices places">
+    <button data-w="hall"><b data-t="hall"></b><small data-t="hallSub"></small></button>
+    <button data-w="online"><b data-t="onlineName"></b><small data-t="onlineSub"></small></button>
+  </div>
+  <div class="small" data-t="later"></div>
+  <button class="ghost" id="whereBack" hidden data-t="backToText"></button>
+</div>
+
+<!-- before the start / Break -->
+<div class="cover brk" id="waiting" hidden>
+  <div class="halo"></div>
+  <div class="word" id="waitWord"></div>
+  <p id="waitSub"></p>
+  <div class="back" id="waitBack" hidden></div>
+  <div class="steps" id="steps" aria-hidden="true"></div><div class="stepsTxt" id="stepsTxt"></div>
+  <div class="mantra" id="mantra" hidden><small id="mantraT"></small><div class="mb" lang="bo" id="mantraB"></div><div class="mp" id="mantraP"></div></div>
+  <div class="mineT" id="mineT" hidden></div>
+  <button class="ghost" id="readBtn" data-t="read"></button>
+</div>
+
+<!-- settings -->
+<div class="sheet-bg" id="sheetBg" hidden></div>
+<div class="sheet glass" id="sheet" hidden role="dialog" aria-modal="true" aria-labelledby="setTitle" tabindex="-1">
+  <div class="sheet-h"><b id="setTitle" data-t="settings"></b><button class="done" data-t="done"></button></div>
+  <button class="approw" id="setApp" hidden><img src="images/icon-192.png" alt="" width="44" height="44"><span><b data-t="setApp"></b><small data-t="setAppS"></small></span></button>
+  <h4 data-t="language"></h4>
+  <div class="seg" id="segLang"><button data-v="bo" lang="bo" class="bo">བོད་ཡིག</button><button data-v="en">English</button><button data-v="zh" lang="zh-Hant" class="zh">繁體</button><button data-v="zhs" lang="zh-Hans" class="zh">简体</button></div>
+  <h4 data-t="where"></h4>
+  <div class="seg" id="segWhere"><button data-v="hall" data-t="hall"></button><button data-v="online" data-t="online"></button></div>
+  <div class="hint" id="hallHint" data-t="hallHint"></div>
+  <div id="delayBox">
+    <div class="delay">
+      <button id="dMinus" aria-label="−1 s">−</button>
+      <input type="range" id="delay" min="0" max="60" step="1" aria-label="Delay in seconds">
+      <button id="dPlus" aria-label="+1 s">+</button>
+      <output id="dVal">0 s</output>
+    </div>
+    <div class="hint" id="delayTxt"></div>
+    <button class="link" id="dReset" hidden></button>
+  </div>
+  <h4 data-t="size"></h4>
+  <div class="seg" id="segSize"><button data-v="0.8">A−−</button><button data-v="0.9">A−</button><button data-v="1">A</button><button data-v="1.15">A+</button><button data-v="1.32">A++</button><button data-v="1.55">A+++</button></div>
+  <h4 data-t="theme"></h4>
+  <div class="seg" id="segTheme"><button data-v="evening" data-t="evening"></button><button data-v="parchment" data-t="parchment"></button><button data-v="dim" data-t="dim"></button></div>
+  <h4 data-t="show"></h4>
+  <div class="list">
+    <div class="row" id="rowScript"><span data-t="script"></span><button class="sw" id="swScript" role="switch" aria-checked="false" aria-labelledby="rowScript"></button></div>
+    <div class="row" id="rowMeaning"><span data-t="meaning"></span><button class="sw" id="swMeaning" role="switch" aria-checked="false" aria-labelledby="rowMeaning"></button></div>
+    <div class="row" id="rowNotes"><span data-t="notes"></span><button class="sw" id="swNotes" role="switch" aria-checked="false" aria-labelledby="rowNotes"></button></div>
+  </div>
+  <h4 data-t="mine"></h4>
+  <div class="hint" id="mineTxt"></div>
+  <div class="hint own" id="ownTxt"></div>
+</div>
+
+<!-- contents -->
+<div class="sheet glass toc" id="toc" hidden role="dialog" aria-modal="true" aria-labelledby="tocTitle" tabindex="-1">
+  <div class="sheet-h"><b id="tocTitle" data-t="contents"></b><button class="done" data-t="done"></button></div>
+  <ol id="tocList"></ol>
+</div>
+
+<!-- putting the page on the Home Screen, for this phone and browser -->
+<div class="sheet glass" id="inst" hidden role="dialog" aria-modal="true" aria-labelledby="iTitle" tabindex="-1">
+  <div class="sheet-h"><b id="iTitle"></b><button class="done" data-t="done"></button></div>
+  <div class="ihero"><img src="images/icon-192.png" alt="" width="72" height="72"><div><b id="iName"></b><small id="iSub"></small></div></div>
+  <ul class="iperks" id="iPerks"></ul>
+  <button class="ibig" id="iGo" hidden></button>
+  <ol class="isteps" id="iSteps"></ol>
+  <button class="ibig" id="iShow" hidden data-t="iShow"></button>
+  <button class="ibig soft" id="iCopy" hidden data-t="iCopy"></button>
+</div>
+
+<script>window.TEXT_V = "{{TEXT_V}}"; window.T2S_V = "{{v:t2s.json}}";</script>
+<script src="prayers.js?v={{v:prayers.js}}"></script>
+<script src="viewer.js?v={{v:viewer.js}}"></script>
+</body>
+</html>

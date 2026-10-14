@@ -1,0 +1,276 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Puja Live · Console</title>
+<!-- The operator's console (private port only). Click a verse, or use → / Space / ← — every phone follows. -->
+<style>
+  :root { --bg: #111; --bg2: #1b1a18; --bg3: #262421; --line: #34312c; --ink: #eee7dc; --soft: #b9b0a3; --mute: #857d71; --gold: #e8c98f; --green: #4fc98a; --red: #e0605a; --blue: #6aa6f0;
+    --tib: "Jomolhari", "Kailasa", "Noto Serif Tibetan", "Microsoft Himalaya", serif; --sans: -apple-system, "Segoe UI", Roboto, sans-serif; }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; height: 100%; background: var(--bg); color: var(--ink); font: 14px/1.4 var(--sans); }
+  button, input, select { font: inherit; color: inherit; }
+  button { background: var(--bg3); border: 1px solid var(--line); border-radius: 8px; padding: 7px 12px; cursor: pointer; }
+  button:hover { border-color: var(--mute); } button.on { background: var(--gold); color: #1a1408; border-color: var(--gold); font-weight: 600; }
+  button.go { background: var(--green); color: #06170e; border-color: var(--green); font-weight: 700; }
+  button.warn { border-color: var(--red); color: var(--red); }
+  input, select { background: var(--bg); border: 1px solid var(--line); border-radius: 8px; padding: 6px 8px; }
+  .app { display: grid; grid-template: auto 1fr / 260px 1fr 300px; height: 100vh; }
+  .top { grid-column: 1 / -1; display: flex; align-items: center; gap: 10px; padding: 10px 14px; border-bottom: 1px solid var(--line); background: var(--bg2); flex-wrap: wrap; }
+  .top .big { font-size: 18px; padding: 10px 22px; }
+  .top .where { flex: 1; min-width: 200px; }
+  .top .where b { display: block; font-size: 15px; } .top .where span { color: var(--mute); font-size: 12.5px; }
+  .dot { width: 10px; height: 10px; border-radius: 50%; display: inline-block; background: var(--mute); vertical-align: middle; margin-right: 6px; }
+  .dot.live { background: var(--green); } .dot.brk { background: var(--gold); } .dot.test { background: var(--blue); }
+  aside, .right { overflow-y: auto; border-right: 1px solid var(--line); padding: 10px; }
+  .right { border-right: 0; border-left: 1px solid var(--line); }
+  aside h3, .right h3 { margin: 14px 4px 6px; font-size: 11px; letter-spacing: .1em; text-transform: uppercase; color: var(--mute); }
+  aside .sec { display: block; width: 100%; text-align: left; margin: 2px 0; padding: 7px 10px; background: transparent; border-color: transparent; }
+  aside .sec .b { display: block; font-family: var(--tib); color: var(--gold); font-size: 15px; }
+  aside .sec.cur { background: var(--bg3); border-color: var(--gold); }
+  aside .grp { margin: 14px 10px 4px; font-size: 11px; color: var(--mute); text-transform: uppercase; letter-spacing: .08em; }
+  aside .rev { display: flex; align-items: center; gap: 6px; margin: 4px 6px; }
+  main { overflow-y: auto; padding: 14px 22px 40vh; }
+  main h2 { margin: 6px 0 2px; font-size: 18px; } main h2 .b { font-family: var(--tib); color: var(--gold); font-weight: 400; margin-right: 10px; }
+  .part { margin: 22px 0 6px; color: var(--soft); font-style: italic; }
+  .note { margin: 8px 0; color: var(--mute); font-size: 12.5px; font-style: italic; }
+  .scr { display: block; width: 100%; text-align: left; margin: 6px 0; padding: 10px 14px; border-radius: 12px; background: var(--bg2); }
+  .scr.cur { border: 2px solid var(--green); background: #16251c; }
+  .scr .ln { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; padding: 2px 4px; border-radius: 6px; }
+  .scr .ln.cur { background: rgba(79,201,138,.18); }
+  .scr .bo { font-family: var(--tib); font-size: 17px; color: var(--gold); }
+  .scr .tr { color: var(--soft); font-size: 13px; }
+  .scr .en { color: var(--mute); font-size: 12.5px; font-style: italic; grid-column: 1 / -1; }
+  .scr .fig { color: var(--blue); font-size: 12px; font-weight: 600; }
+  .actions { margin: 6px 0 14px; display: flex; gap: 8px; flex-wrap: wrap; }
+  .right label { display: block; margin: 8px 4px 4px; color: var(--soft); font-size: 12.5px; }
+  .right .row { display: flex; gap: 6px; } .right .row > * { flex: 1; min-width: 0; }
+  .right textarea { width: 100%; min-height: 64px; background: var(--bg); border: 1px solid var(--line); border-radius: 8px; color: var(--ink); padding: 8px; font: inherit; }
+  .stats { display: grid; grid-template-columns: 1fr auto; gap: 2px 10px; margin: 4px; font-size: 13px; }
+  .stats b { font-size: 26px; grid-column: 1 / -1; }
+  .stats span:nth-child(odd) { color: var(--mute); }
+  .keys { color: var(--mute); font-size: 12px; margin: 10px 4px; line-height: 1.7; }
+  kbd { background: var(--bg3); border: 1px solid var(--line); border-radius: 4px; padding: 0 5px; font-size: 11px; }
+  a { color: var(--blue); }
+  .err { position: fixed; bottom: 12px; left: 50%; translate: -50% 0; background: var(--red); color: #fff; padding: 8px 14px; border-radius: 8px; }
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="top">
+    <button class="big" id="prev" title="← / PageUp">◀ Prev</button>
+    <button class="big go" id="next" title="→ / Space / PageDown">Next ▶</button>
+    <div class="where"><b><span class="dot" id="dot"></span><span id="wTitle">—</span></b><span id="wSub"></span></div>
+    <button id="mode" title="L">Mode: verse</button>
+    <span>Round <button id="rMinus">−</button> <b id="round">1</b> <button id="rPlus">+</button></span>
+    <button id="brk" title="B">☕ Break</button>
+    <button id="resume" hidden>▶ Resume</button>
+    <button id="ret" hidden>↩ Return</button>
+    <button id="start">Not started</button>
+    <button id="test" title="Rehearse: phones keep waiting">Rehearse</button>
+  </div>
+  <aside id="secs"></aside>
+  <main id="scrs"></main>
+  <div class="right">
+    <h3>Phones</h3>
+    <div class="stats" id="stats"></div>
+    <h3>Notice to all phones</h3>
+    <textarea id="msg" placeholder="e.g. Tea will be served after this section."></textarea>
+    <div class="row"><button id="msgSend">Send</button><button id="msgClear">Clear</button></div>
+    <h3>Break</h3>
+    <label>Resume in (minutes)</label>
+    <div class="row"><input type="number" id="backMin" min="0" max="600" placeholder="15"><button id="backSet">Set</button><button id="backClear">Clear</button></div>
+    <div class="keys" id="backTxt"></div>
+    <h3>Online viewers</h3>
+    <label>Text delay to match the video (seconds)</label>
+    <div class="row"><input type="number" id="delay" min="0" max="120"><button id="delaySet">Set</button></div>
+    <label>YouTube video IDs (shown to online viewers)</label>
+    <div class="row"><input id="ytEn" placeholder="English"><input id="ytBo" placeholder="Tibetan"></div>
+    <div class="row" style="margin-top:6px"><input id="ytZh" placeholder="Chinese"><input id="ytCh" placeholder="Channel ID"></div>
+    <div class="row" style="margin-top:6px"><button id="ytSet">Save</button></div>
+    <h3>Maintenance</h3>
+    <button id="reload" class="warn">⟳ Refresh all phones</button>
+    <div class="keys">
+      <kbd>→</kbd> <kbd>Space</kbd> next · <kbd>←</kbd> previous · <kbd>L</kbd> verse/line · <kbd>B</kbd> break<br>
+      <a href="/viewer" target="_blank">Preview phone page</a> · <a href="/obs" target="_blank">OBS subtitles</a>
+    </div>
+  </div>
+</div>
+<div class="err" id="err" hidden></div>
+<script src="prayers.js"></script>
+<script>
+(() => {
+  const $ = (id) => document.getElementById(id);
+  const el = (t, c, x) => { const d = document.createElement(t); if (c) d.className = c; if (x != null) d.textContent = x; return d; };
+  let P = null, S = null, viewSec = null;
+
+  async function post(patch) {
+    try { const r = await fetch("api/state", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(patch) });
+      if (!r.ok) throw new Error(r.status); const j = await r.json(); S = j.state; paint(); }
+    catch (e) { $("err").textContent = "Not saved: " + e.message; $("err").hidden = false; setTimeout(() => ($("err").hidden = true), 4000); }
+  }
+
+  /* ── moving the pointer ── */
+  const line = () => P.lines[S.index];
+  const run = () => P.sections.filter((s) => !s.anytime);
+  function go(index, extra = {}) {
+    const a = P.lines[S.index], b = P.lines[index];
+    const fresh = !a || a.sIdx !== b.sIdx || (a.pi !== b.pi && P.sections[b.sIdx].parts[b.pi]?.rep);   // a new section / repeated prayer: round 1
+    post({ index, set: true, ...(fresh && extra.round == null ? { round: 1 } : {}), ...extra });
+  }
+  function step(dir) {
+    if (!S.set) return go(dir > 0 ? (run()[0] || P.sections[0]).first : 0);
+    const l = line(), sec = P.sections[l.sIdx];
+    if (S.mode === "line") {
+      const i = S.index + dir;
+      if (i >= sec.first && i <= sec.last) return go(i);
+    } else {
+      const sc = P.screens[l.scr + dir];
+      if (sc && sc.sIdx === l.sIdx) return go(sc.first);
+    }
+    if (sec.anytime) return;                     // Break, Tea, an empowerment: no "next section"
+    const r = run(), k = r.indexOf(sec), nx = r[k + dir];
+    if (nx) go(dir > 0 ? nx.first : (S.mode === "line" ? nx.last : P.screens[nx.lastScr].first));
+  }
+  function goSection(s) { go(s.first, { round: 1 }); viewSec = s.idx; }
+  function brk() {
+    const b = P.sections.find((s) => s.card); if (!b) return alert('No section with "card": true in prayers.json');
+    const l = line(); post({ index: b.first, set: true, bookmark: l && !P.sections[l.sIdx].card ? S.index : S.bookmark });
+  }
+  function resume() { if (typeof S.bookmark === "number") post({ index: S.bookmark, bookmark: null, set: true, back: 0 }); }
+  function gotoSection(id, ret) {              // a pecha instruction: "recite the Praises ×3, then come back here"
+    const s = P.sections.find((x) => x.id === id); if (!s) return;
+    post({ index: s.first, set: true, round: 1, bookmark: ret }); viewSec = s.idx;
+  }
+
+  /* ── painting ── */
+  function paint() {
+    if (!P || !S) return;
+    const l = S.set ? line() : null, sec = l && P.sections[l.sIdx], part = sec && l.pi >= 0 ? sec.parts[l.pi] : null;
+    if (viewSec == null || (l && followSec !== l.sIdx)) { viewSec = l ? l.sIdx : (run()[0] || P.sections[0]).idx; followSec = l && l.sIdx; }
+    $("dot").className = "dot " + (S.test ? "test" : !S.set ? "" : sec.card ? "brk" : "live");
+    $("wTitle").textContent = !S.set ? "Not started — phones show the welcome / waiting screen" : sec.title.en + (part ? " · " + part.title.en : "");
+    $("wSub").textContent = !S.set ? "" : `line ${S.index + 1} of ${P.lines.length} · screen ${l.scr + 1}` + (S.test ? " · REHEARSAL (phones are not following)" : "");
+    $("mode").textContent = "Mode: " + S.mode; $("mode").classList.toggle("on", S.mode === "line");
+    $("round").textContent = S.round;
+    $("start").textContent = S.set ? "■ Stop (show waiting)" : "Not started"; $("start").classList.toggle("on", !S.set);
+    $("test").classList.toggle("on", !!S.test);
+    const onBreak = !!(sec && sec.card);
+    $("resume").hidden = !onBreak || typeof S.bookmark !== "number";
+    $("ret").hidden = onBreak || typeof S.bookmark !== "number";
+    if (document.activeElement !== $("msg")) $("msg").value = S.msg || "";
+    if (document.activeElement !== $("delay")) $("delay").value = S.delay;
+    for (const [id, k] of [["ytEn", "en"], ["ytBo", "bo"], ["ytZh", "zh"], ["ytCh", "ch"]]) if (document.activeElement !== $(id)) $(id).value = (S.yt || {})[k] || "";
+    $("backTxt").textContent = S.back ? "Phones show: resuming at " + new Date(S.back).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }) : "";
+    paintSecs(); paintScreens();
+  }
+  let followSec = null, scrolledTo = null;
+  function paintSecs() {
+    const box = $("secs"); box.replaceChildren();
+    const l = S.set ? line() : null;
+    box.appendChild(el("h3", "", "Order of the puja"));
+    run().forEach((s, k) => {
+      if (s.group) box.appendChild(el("div", "grp", s.group));
+      const b = el("button", "sec" + (l && l.sIdx === s.idx ? " cur" : "")); b.append(el("span", "b", s.title.bo || ""), document.createTextNode(`${k + 1}. ${s.title.en}`));
+      b.onclick = () => { viewSec = s.idx; paintScreens(); }; b.ondblclick = () => goSection(s); box.appendChild(b);
+    });
+    box.appendChild(el("h3", "", "Any time"));
+    P.sections.filter((s) => s.anytime).forEach((s) => {
+      const b = el("button", "sec" + (l && l.sIdx === s.idx ? " cur" : "")); b.append(el("span", "b", s.title.bo || ""), document.createTextNode(s.title.en));
+      b.onclick = () => { viewSec = s.idx; paintScreens(); }; box.appendChild(b);
+      if (s.reveal) {
+        const r = el("label", "rev"), cb = el("input"); cb.type = "checkbox"; cb.checked = (S.open || []).includes(s.id);
+        cb.onchange = () => post({ open: cb.checked ? [...new Set([...(S.open || []), s.id])] : (S.open || []).filter((x) => x !== s.id) });
+        r.append(cb, document.createTextNode("Open on phones in the hall")); box.appendChild(r);
+      }
+    });
+    const figs = P.sections.flatMap((s) => s.taras || []);
+    if (figs.length) {
+      box.appendChild(el("h3", "", "Chosen figure (fills {name:…})"));
+      const sel = el("select"); sel.style.width = "100%";
+      sel.append(el("option", "", "—"), ...figs.map((f) => { const o = el("option", "", `${f.id}. ${f.name?.en || ""}`); o.value = f.id; return o; }));
+      sel.value = S.tara || "—"; sel.onchange = () => post({ tara: sel.value === "—" ? "" : sel.value }); box.appendChild(sel);
+    }
+  }
+  function paintScreens() {
+    const box = $("scrs"); box.replaceChildren();
+    const s = P.sections[viewSec]; if (!s) return;
+    const l = S.set ? line() : null;
+    const h = el("h2"); h.append(el("span", "b", s.title.bo || ""), document.createTextNode(s.title.en)); box.appendChild(h);
+    const acts = el("div", "actions");
+    const startB = el("button", "go", "▶ Start this section"); startB.onclick = () => goSection(s); acts.appendChild(startB);
+    if (s.loop) { const rb = el("button", "", "↻ Repeat (next round)"); rb.onclick = () => post({ index: s.first, set: true, round: S.round + 1 }); acts.appendChild(rb); }
+    if (s.note) acts.appendChild(el("span", "note", s.note.en || ""));
+    box.appendChild(acts);
+    let curEl = null;
+    for (let k = s.firstScr; k <= s.lastScr; k++) {
+      const sc = P.screens[k], first = P.lines[sc.first];
+      const pt = s.parts.find((p) => p.first === sc.first);
+      if (pt) { const ph = el("div", "part", pt.title.en + (pt.rep ? `  (×${pt.rep})` : "")); box.appendChild(ph);
+        if (pt.rep) { const ab = el("button", "", "↻ Again (next repetition)"); ab.onclick = () => post({ index: pt.first, set: true, round: S.round + 1 }); box.appendChild(ab); } }
+      (first.before || []).forEach((r) => box.appendChild(el("div", "note", r.en || r.bo)));
+      const b = el("button", "scr" + (l && l.scr === k ? " cur" : ""));
+      if (first.tara) b.appendChild(el("div", "fig", "Figure " + first.tara));
+      for (let i = sc.first; i <= sc.last; i++) {
+        const x = P.lines[i], row = el("div", "ln" + (l && S.mode === "line" && S.index === i ? " cur" : ""));
+        row.append(el("div", "bo", Prayers.fillText(x.bo, "bo")), el("div", "tr", Prayers.fillText(x.tr, "tr")));
+        if (x.en && (i === sc.last || x.en !== P.lines[i + 1].en)) row.appendChild(el("div", "en", Prayers.fillText(x.en, "en")));
+        row.onclick = (e) => { if (S.mode === "line") { e.stopPropagation(); go(i); } };
+        b.appendChild(row);
+      }
+      b.onclick = () => go(sc.first);
+      if (l && l.scr === k) curEl = b;
+      box.appendChild(b);
+      const last = P.lines[sc.last];
+      (last.after || []).forEach((r) => box.appendChild(el("div", "note", r.en || r.bo)));
+      if (last.goto) { const g = el("button", "", last.goto.label || "→ " + last.goto.section); g.onclick = () => gotoSection(last.goto.section, sc.last + 1 <= s.last ? sc.last + 1 : sc.last); box.appendChild(g); }
+    }
+    if (curEl && scrolledTo !== S.index) { scrolledTo = S.index; curEl.scrollIntoView({ block: "center", behavior: "smooth" }); }
+  }
+  function paintStats(st) {
+    if (!st) return;
+    const box = $("stats"); box.replaceChildren(el("b", "", st.phones + " phones"));
+    const rows = [["In the hall", st.where.hall || 0], ["Online", st.where.online || 0], ["Home-screen app", st.app],
+      ...Object.entries(st.lang).map(([k, v]) => ["Language: " + ({ bo: "Tibetan", en: "English", zh: "繁體", zhs: "简体", "": "not chosen" }[k] ?? k), v])];
+    for (const [a, b] of rows) box.append(el("span", "", a), el("span", "", String(b)));
+  }
+
+  /* ── controls ── */
+  $("next").onclick = () => step(1); $("prev").onclick = () => step(-1);
+  $("mode").onclick = () => post({ mode: S.mode === "verse" ? "line" : "verse" });
+  $("rMinus").onclick = () => post({ round: Math.max(1, S.round - 1) }); $("rPlus").onclick = () => post({ round: S.round + 1 });
+  $("brk").onclick = brk; $("resume").onclick = resume;
+  $("ret").onclick = () => post({ index: S.bookmark, bookmark: null, round: 1 });
+  $("start").onclick = () => post({ set: !S.set });
+  $("test").onclick = () => post({ test: !S.test });
+  $("msgSend").onclick = () => post({ msg: $("msg").value.trim() }); $("msgClear").onclick = () => { $("msg").value = ""; post({ msg: "" }); };
+  $("backSet").onclick = () => { const m = +$("backMin").value; if (m > 0) post({ back: Date.now() + m * 60000 }); };
+  $("backClear").onclick = () => post({ back: 0 });
+  $("delaySet").onclick = () => post({ delay: +$("delay").value || 0 });
+  $("ytSet").onclick = () => post({ yt: { en: $("ytEn").value.trim(), bo: $("ytBo").value.trim(), zh: $("ytZh").value.trim(), ch: $("ytCh").value.trim() } });
+  $("reload").onclick = () => { if (confirm("Reload the page on every phone (spread over 20 s)?")) post({ reload: true }); };
+  addEventListener("keydown", (e) => {
+    if (e.target.closest("input, textarea, select") || e.metaKey || e.ctrlKey) return;
+    if (["ArrowRight", "ArrowDown", "PageDown", " "].includes(e.key)) { e.preventDefault(); step(1); }
+    else if (["ArrowLeft", "ArrowUp", "PageUp"].includes(e.key)) { e.preventDefault(); step(-1); }
+    else if (e.key === "l" || e.key === "L") $("mode").onclick();
+    else if (e.key === "b" || e.key === "B") brk();
+  });
+
+  /* ── live link to the server ── */
+  let pv = null;
+  function listen() {
+    const es = new EventSource("api/stream");
+    es.onmessage = async (e) => {
+      const m = JSON.parse(e.data);
+      const textChanged = m.pv !== pv;
+      if (textChanged) { pv = m.pv; P = await Prayers.loadPrayers("prayers.json"); }   // prayers.json edited: reload it here too
+      const same = !textChanged && S && JSON.stringify(S) === JSON.stringify(m.state); S = m.state; if (!same) paint(); paintStats(m.stats);
+    };
+  }
+  listen();
+})();
+</script>
+</body>
+</html>

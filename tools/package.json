@@ -1,0 +1,1 @@
+{ "private": true, "type": "module", "description": "Optional authoring tools for puja-live (not needed at runtime)", "devDependencies": { "opencc-js": "^1.0.5" } }

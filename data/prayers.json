@@ -1,0 +1,452 @@
+{
+ "_README": "Demo text for puja-live (replace with your own). See docs/DATA-FORMAT.md. Each line: bo (Tibetan), tr (English phonetics), en (English translation), trz (Chinese phonetics), zh (Chinese translation); empty strings are not shown. v = verse number. before/after = ritual instructions. tara = figure shown on the Live card for this verse. Sections: anytime, card, loop, reveal, parts, group, taras.",
+ "event": {
+  "bo": "སྒྲོལ་ཆོག་ཆེན་མོ།",
+  "en": "100,000 Tara Puja (demo)",
+  "zh": "度母法會（示範）"
+ },
+ "practice": {
+  "bo": "སྒྲོལ་མའི་ཆོ་ག",
+  "en": "Tara practice",
+  "zh": "度母修法"
+ },
+ "viewer": 0,
+ "mantra": {
+  "label": {
+   "bo": "",
+   "en": "Tārā’s mantra",
+   "zh": "度母心咒"
+  },
+  "bo": "ༀ་ཏཱ་རེ་ཏུཏྟཱ་རེ་ཏུ་རེ་སྭཱ་ཧཱ།",
+  "tr": "om taré tuttaré turé soha",
+  "trz": "嗡 大列 都大列 都列 梭哈"
+ },
+ "sections": [
+  {
+   "id": "break",
+   "anytime": true,
+   "card": true,
+   "title": {
+    "bo": "བར་སེང་།",
+    "en": "Break",
+    "zh": "休息"
+   },
+   "lines": [
+    {
+     "bo": "",
+     "tr": "",
+     "en": "",
+     "trz": "",
+     "zh": "",
+     "v": 1
+    }
+   ]
+  },
+  {
+   "id": "refuge",
+   "title": {
+    "bo": "སྐྱབས་འགྲོ་སེམས་བསྐྱེད།",
+    "en": "Refuge and Bodhicitta",
+    "zh": "皈依發心"
+   },
+   "parts": [
+    {
+     "at": 0,
+     "rep": 3,
+     "title": {
+      "bo": "སྐྱབས་འགྲོ།",
+      "en": "Refuge ×3",
+      "zh": "皈依 ×3"
+     }
+    }
+   ],
+   "lines": [
+    {
+     "bo": "སངས་རྒྱས་ཆོས་དང་ཚོགས་ཀྱི་མཆོག་རྣམས་ལ། །",
+     "tr": "sangyé chö dang tsok kyi chok nam la",
+     "en": "In the Buddha, the Dharma and the supreme Assembly",
+     "trz": "桑傑 確當 措吉 確南拉",
+     "zh": "諸佛正法賢聖僧",
+     "v": 1,
+     "before": [
+      {
+       "bo": "",
+       "en": "Recite three times.",
+       "zh": "念誦三遍。"
+      }
+     ]
+    },
+    {
+     "bo": "བྱང་ཆུབ་བར་དུ་བདག་ནི་སྐྱབས་སུ་མཆི། །",
+     "tr": "jangchub bardu dak ni kyab su chi",
+     "en": "I take refuge until I reach awakening.",
+     "trz": "蔣秋 巴都 達尼 嘉蘇齊",
+     "zh": "直至菩提我皈依",
+     "v": 1
+    },
+    {
+     "bo": "བདག་གིས་སྦྱིན་སོགས་བགྱིས་པའི་བསོད་ནམས་ཀྱིས། །",
+     "tr": "dak gi jin sok gyipé sönam kyi",
+     "en": "Through the merit of generosity and the other virtues I practise,",
+     "trz": "達基 進索 吉貝 索南吉",
+     "zh": "我以所修諸善根",
+     "v": 1
+    },
+    {
+     "bo": "འགྲོ་ལ་ཕན་ཕྱིར་སངས་རྒྱས་འགྲུབ་པར་ཤོག །",
+     "tr": "dro la pen chir sangyé drub par shok",
+     "en": "may I attain buddhahood for the benefit of all beings.",
+     "trz": "卓拉 片企 桑傑 竹巴秀",
+     "zh": "為利有情願成佛",
+     "v": 1
+    }
+   ]
+  },
+  {
+   "id": "immeasurables",
+   "title": {
+    "bo": "ཚད་མེད་བཞི།",
+    "en": "The Four Immeasurables",
+    "zh": "四無量心"
+   },
+   "lines": [
+    {
+     "bo": "སེམས་ཅན་ཐམས་ཅད་བདེ་བ་དང་བདེ་བའི་རྒྱུ་དང་ལྡན་པར་གྱུར་ཅིག",
+     "tr": "semchen tamché dewa dang dewé gyu dang denpar gyur chik",
+     "en": "May all beings have happiness and the causes of happiness.",
+     "trz": "",
+     "zh": "願一切有情具樂及樂因",
+     "v": 1
+    },
+    {
+     "bo": "སེམས་ཅན་ཐམས་ཅད་སྡུག་བསྔལ་དང་སྡུག་བསྔལ་གྱི་རྒྱུ་དང་བྲལ་བར་གྱུར་ཅིག",
+     "tr": "semchen tamché dukngal dang dukngal gyi gyu dang dralwar gyur chik",
+     "en": "May all beings be free from suffering and the causes of suffering.",
+     "trz": "",
+     "zh": "願一切有情離苦及苦因",
+     "v": 1
+    },
+    {
+     "bo": "སེམས་ཅན་ཐམས་ཅད་སྡུག་བསྔལ་མེད་པའི་བདེ་བ་དམ་པ་དང་མི་འབྲལ་བར་གྱུར་ཅིག",
+     "tr": "semchen tamché dukngal mepé dewa dampa dang mi dralwar gyur chik",
+     "en": "May all beings never be separated from the sacred happiness free of suffering.",
+     "trz": "",
+     "zh": "願一切有情不離無苦之妙樂",
+     "v": 1
+    },
+    {
+     "bo": "སེམས་ཅན་ཐམས་ཅད་ཉེ་རིང་ཆགས་སྡང་གཉིས་དང་བྲལ་བའི་བཏང་སྙོམས་ཚད་མེད་པ་ལ་གནས་པར་གྱུར་ཅིག",
+     "tr": "semchen tamché nyé ring chak dang nyi dang dralwé tang nyom tsé mepa la népar gyur chik",
+     "en": "May all beings rest in boundless equanimity, free from attachment to near and aversion to far.",
+     "trz": "",
+     "zh": "願一切有情遠離親疏愛憎住平等捨",
+     "v": 1
+    }
+   ]
+  },
+  {
+   "id": "praises",
+   "loop": true,
+   "title": {
+    "bo": "ཕྱག་འཚལ་ཉེར་གཅིག",
+    "en": "Praises to Tārā (excerpt)",
+    "zh": "二十一度母讚（節錄）"
+   },
+   "taras": [
+    {
+     "id": "1",
+     "img": "images/figure-01.svg",
+     "name": {
+      "bo": "སྒྲོལ་མ་མྱུར་མ་དཔའ་མོ།",
+      "en": "Swift Heroine",
+      "zh": "迅勇度母"
+     },
+     "mantra": {
+      "bo": "ༀ་ཏཱ་རེ་ཏུཏྟཱ་རེ་ཏུ་རེ་སྭཱ་ཧཱ།",
+      "tr": "om taré tuttaré turé soha"
+     }
+    },
+    {
+     "id": "2",
+     "img": "images/figure-02.svg",
+     "name": {
+      "bo": "སྒྲོལ་མ་དཀར་མོ།",
+      "en": "Lady of Autumn Moons",
+      "zh": "秋月度母"
+     },
+     "mantra": {
+      "bo": "ༀ་ཏཱ་རེ་ཏུཏྟཱ་རེ་ཏུ་རེ་སྭཱ་ཧཱ།",
+      "tr": "om taré tuttaré turé soha"
+     }
+    },
+    {
+     "id": "3",
+     "img": "images/figure-03.svg",
+     "name": {
+      "bo": "སྒྲོལ་མ་གསེར་མདོག",
+      "en": "Golden Lotus Tārā",
+      "zh": "金蓮度母"
+     },
+     "mantra": {
+      "bo": "ༀ་ཏཱ་རེ་ཏུཏྟཱ་རེ་ཏུ་རེ་སྭཱ་ཧཱ།",
+      "tr": "om taré tuttaré turé soha"
+     }
+    }
+   ],
+   "lines": [
+    {
+     "bo": "ༀ་རྗེ་བཙུན་མ་འཕགས་མ་སྒྲོལ་མ་ལ་ཕྱག་འཚལ་ལོ། །",
+     "tr": "om jetsün ma pakma drolma la chak tsal lo",
+     "en": "Om. Homage to the noble Lady Tārā.",
+     "trz": "",
+     "zh": "",
+     "v": 1
+    },
+    {
+     "bo": "ཕྱག་འཚལ་སྒྲོལ་མ་མྱུར་མ་དཔའ་མོ། །",
+     "tr": "chak tsal drolma nyurma pamo",
+     "en": "Homage to Tārā, swift and fearless, whose eyes flash like lightning, born from the opening heart of the lotus face of the Protector of the Three Worlds.",
+     "trz": "",
+     "zh": "",
+     "v": 2,
+     "tara": "1"
+    },
+    {
+     "bo": "སྤྱན་ནི་སྐད་ཅིག་གློག་དང་འདྲ་མ། །",
+     "tr": "chen ni kéchik lok dang drama",
+     "en": "Homage to Tārā, swift and fearless, whose eyes flash like lightning, born from the opening heart of the lotus face of the Protector of the Three Worlds.",
+     "trz": "",
+     "zh": "",
+     "v": 2
+    },
+    {
+     "bo": "འཇིག་རྟེན་གསུམ་མགོན་ཆུ་སྐྱེས་ཞལ་གྱི། །",
+     "tr": "jikten sum gön chukyé zhal gyi",
+     "en": "Homage to Tārā, swift and fearless, whose eyes flash like lightning, born from the opening heart of the lotus face of the Protector of the Three Worlds.",
+     "trz": "",
+     "zh": "",
+     "v": 2
+    },
+    {
+     "bo": "གེ་སར་བྱེ་བ་ལས་ནི་བྱུང་མ། །",
+     "tr": "gésar jéwa lé ni jungma",
+     "en": "Homage to Tārā, swift and fearless, whose eyes flash like lightning, born from the opening heart of the lotus face of the Protector of the Three Worlds.",
+     "trz": "",
+     "zh": "",
+     "v": 2
+    },
+    {
+     "bo": "ཕྱག་འཚལ་སྟོན་ཀའི་ཟླ་བ་ཀུན་ཏུ། །",
+     "tr": "chak tsal tönkay dawa küntu",
+     "en": "Homage to you whose face is a hundred full autumn moons gathered together, blazing with the light of a thousand assembled stars.",
+     "trz": "",
+     "zh": "",
+     "v": 3,
+     "tara": "2"
+    },
+    {
+     "bo": "གང་བ་བརྒྱ་ནི་བརྩེགས་པའི་ཞལ་མ། །",
+     "tr": "gangwa gya ni tsekpé zhal ma",
+     "en": "Homage to you whose face is a hundred full autumn moons gathered together, blazing with the light of a thousand assembled stars.",
+     "trz": "",
+     "zh": "",
+     "v": 3
+    },
+    {
+     "bo": "སྐར་མ་སྟོང་ཕྲག་ཚོགས་པ་རྣམས་ཀྱིས། །",
+     "tr": "karma tongtrak tsokpa nam kyi",
+     "en": "Homage to you whose face is a hundred full autumn moons gathered together, blazing with the light of a thousand assembled stars.",
+     "trz": "",
+     "zh": "",
+     "v": 3
+    },
+    {
+     "bo": "རབ་ཏུ་ཕྱེ་བའི་འོད་རབ་འབར་མ། །",
+     "tr": "raptu chewé ö rab barma",
+     "en": "Homage to you whose face is a hundred full autumn moons gathered together, blazing with the light of a thousand assembled stars.",
+     "trz": "",
+     "zh": "",
+     "v": 3
+    },
+    {
+     "bo": "ཕྱག་འཚལ་སེར་སྔོ་ཆུ་ནས་སྐྱེས་ཀྱི། །",
+     "tr": "chak tsal ser ngo chu né kyé kyi",
+     "en": "Homage to you whose hand is adorned with a golden-blue lotus born from water, whose sphere is generosity, effort, austerity, peace, patience and meditation.",
+     "trz": "",
+     "zh": "",
+     "v": 4,
+     "tara": "3"
+    },
+    {
+     "bo": "པདྨས་ཕྱག་ནི་རྣམ་པར་བརྒྱན་མ། །",
+     "tr": "pemé chak ni nampar gyen ma",
+     "en": "Homage to you whose hand is adorned with a golden-blue lotus born from water, whose sphere is generosity, effort, austerity, peace, patience and meditation.",
+     "trz": "",
+     "zh": "",
+     "v": 4
+    },
+    {
+     "bo": "སྦྱིན་པ་བརྩོན་འགྲུས་དཀའ་ཐུབ་ཞི་བ། །",
+     "tr": "jinpa tsöndrü katub zhiwa",
+     "en": "Homage to you whose hand is adorned with a golden-blue lotus born from water, whose sphere is generosity, effort, austerity, peace, patience and meditation.",
+     "trz": "",
+     "zh": "",
+     "v": 4
+    },
+    {
+     "bo": "བཟོད་པ་བསམ་གཏན་སྤྱོད་ཡུལ་ཉིད་མ། །",
+     "tr": "zöpa samten chöyul nyi ma",
+     "en": "Homage to you whose hand is adorned with a golden-blue lotus born from water, whose sphere is generosity, effort, austerity, peace, patience and meditation.",
+     "trz": "",
+     "zh": "",
+     "v": 4
+    }
+   ]
+  },
+  {
+   "id": "mantra",
+   "title": {
+    "bo": "སྔགས་བཟླ་བ།",
+    "en": "Mantra Recitation",
+    "zh": "持咒"
+   },
+   "lines": [
+    {
+     "bo": "ༀ་ཏཱ་རེ་ཏུཏྟཱ་རེ་ཏུ་རེ་སྭཱ་ཧཱ། །",
+     "tr": "om taré tuttaré turé soha",
+     "en": "",
+     "trz": "嗡 大列 都大列 都列 梭哈",
+     "zh": "",
+     "v": 1,
+     "before": [
+      {
+       "bo": "",
+       "en": "Recite the mantra as many times as you can.",
+       "zh": "盡力持誦心咒。"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "dedication",
+   "group": "After the puja",
+   "title": {
+    "bo": "བསྔོ་བ།",
+    "en": "Dedication",
+    "zh": "迴向"
+   },
+   "lines": [
+    {
+     "bo": "དགེ་བ་འདི་ཡིས་སྐྱེ་བོ་ཀུན། །",
+     "tr": "gewa di yi kyewo kün",
+     "en": "By this virtue may all beings",
+     "trz": "",
+     "zh": "願此功德令眾生",
+     "v": 1
+    },
+    {
+     "bo": "བསོད་ནམས་ཡེ་ཤེས་ཚོགས་རྫོགས་ཤིང་། །",
+     "tr": "sönam yeshé tsok dzok shing",
+     "en": "complete the accumulations of merit and wisdom,",
+     "trz": "",
+     "zh": "圓滿福慧二資糧",
+     "v": 1
+    },
+    {
+     "bo": "བསོད་ནམས་ཡེ་ཤེས་ལས་བྱུང་བའི། །",
+     "tr": "sönam yeshé lé jungwé",
+     "en": "and attain the two sacred kāyas",
+     "trz": "",
+     "zh": "從福慧所生起之",
+     "v": 1
+    },
+    {
+     "bo": "དམ་པ་སྐུ་གཉིས་ཐོབ་པར་ཤོག །",
+     "tr": "dampa ku nyi tobpar shok",
+     "en": "that arise from merit and wisdom.",
+     "trz": "",
+     "zh": "二種聖身願獲得",
+     "v": 1,
+     "goto": {
+      "section": "praises",
+      "label": "→ 21 Praises once more, then back here"
+     }
+    }
+   ]
+  },
+  {
+   "id": "empowerment",
+   "anytime": true,
+   "reveal": true,
+   "title": {
+    "bo": "རྗེས་གནང་།",
+    "en": "Empowerment: repeat after Rinpoche",
+    "zh": "隨許：隨仁波切複誦"
+   },
+   "parts": [
+    {
+     "at": 0,
+     "title": {
+      "bo": "",
+      "en": "Visualisation",
+      "zh": "觀想"
+     }
+    },
+    {
+     "at": 2,
+     "rep": 3,
+     "title": {
+      "bo": "",
+      "en": "Refuge ×3",
+      "zh": "皈依 ×3"
+     }
+    },
+    {
+     "at": 3,
+     "title": {
+      "bo": "",
+      "en": "Mantra",
+      "zh": "心咒"
+     }
+    }
+   ],
+   "lines": [
+    {
+     "bo": "",
+     "tr": "",
+     "en": "Visualise {name:Tārā} in the space in front of you, radiant and smiling.",
+     "trz": "",
+     "zh": "",
+     "v": 1,
+     "kind": "vis"
+    },
+    {
+     "bo": "",
+     "tr": "",
+     "en": "Rinpoche explains the meaning of the empowerment.",
+     "trz": "",
+     "zh": "",
+     "v": 2,
+     "kind": "talk"
+    },
+    {
+     "bo": "བླ་མ་ལ་སྐྱབས་སུ་མཆིའོ། །",
+     "tr": "lama la kyab su chi o",
+     "en": "I take refuge in the guru.",
+     "trz": "",
+     "zh": "皈依上師",
+     "v": 3
+    },
+    {
+     "bo": "{mantra:ༀ་ཏཱ་རེ་ཏུཏྟཱ་རེ་ཏུ་རེ་སྭཱ་ཧཱ།}",
+     "tr": "{mantra:om taré tuttaré turé soha}",
+     "en": "The mantra of {name:the chosen Tārā}.",
+     "trz": "",
+     "zh": "",
+     "v": 4
+    }
+   ]
+  }
+ ]
+}
